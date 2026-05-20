@@ -16,13 +16,38 @@ uiha_ws/
 └── uiha_yolo/              # Python YOLO Algılama Paketi
     ├── weights/            # Eğitilmiş model (best.pt)
     └── uiha_yolo/          # YOLO node scriptleri
-
+```
 
 ##🛠 Behavior Tree (BT) Motorunu Kurma
-Projemiz, endüstri standardı olan BehaviorTree.CPP v4 kütüphanesini kullanmaktadır. Bu kütüphaneyi yerel ortamınıza kurmak ve projenin bir parçası yapmak için aşağıdaki adımları takip edin:
+Projemiz, endüstri standardı olan BehaviorTree.CPP v4 kütüphanesini kullanmaktadır. Bu kütüphaneyi yerel ortamınıza kurmak ve projenin bir parçası yapmak için aşağıdakileri yapın:
 
-1. Submodule Tanımlama ve Çekme
+Submodule Tanımlama ve Çekme
 Repo klonlandıktan sonra, alt modül olan BT motorunu çekmek için ana dizinde şu komutu çalıştırın:
 
-Bash
+```text
 git submodule update --init --recursive
+```
+## Görev Ağacı 
+### Ana Karar Verme Mekanizmamız
+<img width="815" height="323" alt="image" src="https://github.com/user-attachments/assets/79d827b6-cd88-44d4-b3c3-55244344aba3" />
+
+### FailSafe Katmanımız
+
+Olası güvenlik sorunları ve onlara karşı alınması gereken aksiyonlar
+<img width="815" height="323" alt="image" src="https://github.com/user-attachments/assets/25a6a5c0-88e1-4574-b8c4-bce024ca51e4" />
+
+### Görev Seçim Katmanımız
+
+Otonom sistemin hangi görevi yapacağının kararını aldığı ve gerekli aksiyonları aldığı katmandır
+<img width="1717" height="545" alt="image" src="https://github.com/user-attachments/assets/5d80027e-b338-43e4-9667-a5b024818072" />
+
+### Görüntü İşleme Katmanı
+
+2. görev söz konusu olduğunda devreye giren taraf
+<img width="1651" height="361" alt="image" src="https://github.com/user-attachments/assets/ab70fa6d-2e3c-491e-84bd-92b3779e137b" />
+
+
+
+
+
+
