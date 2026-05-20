@@ -1,0 +1,130 @@
+<root BTCPP_format="4" main_tree_to_execute="UIHA_AnaKararVerici">
+  <TreeNodesModel>
+    <Condition ID="GorevSerisiTamamlandiMi"/>
+    <Condition ID="HavadaMiyiz"/>
+    <Condition ID="Gorev1SeciliMi"/>
+    <Condition ID="Gorev2SeciliMi"/>
+    <Condition ID="MusabakaSuresiDolduMu"/>
+    <Action ID="OtonomInisYap"/>
+
+    <Condition ID="HaberlesmeKoptuMu"/>
+    <Condition ID="BataryaKritikMi"/>
+    <Condition ID="RuzgarEsikDegeriAsildiMi"/> 
+    <Condition ID="IrtifaVeyaGeofenceAsildiMi"/> 
+    <Action ID="KontrolluYarimGazInisYap"/>
+    <Action ID="GaziTamamenKes"/>
+    <Action ID="GuvenliIrtifayaInveMerkezeYonel"/>
+
+    <Action ID="OtonomKalkisYap"/>
+
+    <Action ID="SonsuzManevrasiniYap"/>
+    <Action ID="StabilHoverModunaGec"/> 
+    <Condition ID="HoverSuresiYeterliMi"/>
+
+    <Condition ID="Direk2DisaridanGecildiMi"/>
+    <Action ID="KonumaIlerle"/>
+    <Action ID="YoloHedefTaramaAktiflestir"/>
+    <Condition ID="AltigenHedefTespitEdildiMi"/>
+    <Condition ID="UcgenHedefTespitEdildiMi"/>
+    <Condition ID="KareHedefMi"/> 
+    <Action ID="HizalanVeKirmiziYukuBirak"/>
+    <Action ID="HizalanVeMaviYukuBirak"/>
+    <Action ID="SerbestKesifUcusuYap"/>
+  </TreeNodesModel>
+
+  <BehaviorTree ID="UIHA_AnaKararVerici">
+    <ReactiveFallback name="Ana_Root">
+      <GorevSerisiTamamlandiMi/>
+      <SubTree ID="FailSafe_Katmani"/>
+      <SubTree ID="GorevKatmani"/>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="FailSafe_Katmani">
+    <ReactiveFallback name="FS_Root">
+      <ReactiveSequence name="FS_Hakem_Mudahale">
+        <HaberlesmeKoptuMu/>
+        <GaziTamamenKes/>
+      </ReactiveSequence>
+      <ReactiveSequence name="FS_Batarya_Guvenligi">
+        <BataryaKritikMi/>
+        <KontrolluYarimGazInisYap/>
+      </ReactiveSequence>
+      <ReactiveSequence name="FS_Hava_Muhalefeti">
+        <RuzgarEsikDegeriAsildiMi/>
+        <KontrolluYarimGazInisYap/>
+      </ReactiveSequence>
+      <ReactiveSequence name="FS_Sınır_Ihlali">
+        <IrtifaVeyaGeofenceAsildiMi/>
+        <GuvenliIrtifayaInveMerkezeYonel/>
+      </ReactiveSequence>
+    </ReactiveFallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="GorevKatmani">
+    <Sequence name="Ana_Gorev_Akisi">
+      <Fallback name="Kalkis_Merkezi">
+        <HavadaMiyiz/>
+        <OtonomKalkisYap/>
+      </Fallback>
+
+      <Fallback name="Gorev_Modu_Secici">
+        <Sequence name="Gorev_1_Manevra_Akisi">
+          <Gorev1SeciliMi/>
+          <SonsuzManevrasiniYap/>
+          <StabilHoverModunaGec/>
+          <RetryUntilSuccessful num_attempts="-1" name="Hover_Sayac_Dongusu">
+            <Fallback name="Hover_Check">
+              <HoverSuresiYeterliMi/>
+              <AlwaysFailure/>
+            </Fallback>
+          </RetryUntilSuccessful>
+        </Sequence>
+
+        <Sequence name="Gorev_2_Ana_Akis">
+          <Gorev2SeciliMi/>
+          <Sequence name="Mecburi_Parkur_Baslangici">
+            <KonumaIlerle/> 
+            <Direk2DisaridanGecildiMi/>
+          </Sequence>
+          <RetryUntilSuccessful num_attempts="-1" name="UIHA_Musabaka_Loop">
+            <ReactiveFallback name="Zaman_Ve_Aksiyon_Karar">
+              <MusabakaSuresiDolduMu/>
+              <Sequence name="Tarama_Ve_Mudahale_Adimi">
+                <ForceSuccess name="Yolo_Görsel_Servo_Dalı">
+                  <SubTree ID="Yolo_Görsel_Mekanizma"/>
+                </ForceSuccess>
+                <AlwaysFailure/>
+              </Sequence>
+            </ReactiveFallback>
+          </RetryUntilSuccessful>
+        </Sequence>
+      </Fallback>
+
+      <OtonomInisYap/>
+    </Sequence>
+  </BehaviorTree>
+
+  <BehaviorTree ID="Yolo_Görsel_Mekanizma">
+    <Sequence name="Görsel_Algılama_Döngüsü">
+      <YoloHedefTaramaAktiflestir/>
+      <Fallback name="Hedef_Diyagram_Secici">
+        <Sequence name="Altigen_Drop_Senaryosu">
+          <AltigenHedefTespitEdildiMi/>
+          <Inverter>
+            <KareHedefMi/>
+          </Inverter>
+          <HizalanVeKirmiziYukuBirak/>
+        </Sequence>
+        <Sequence name="Ucgen_Drop_Senaryosu">
+          <UcgenHedefTespitEdildiMi/>
+          <Inverter>
+            <KareHedefMi/>
+          </Inverter>
+          <HizalanVeMaviYukuBirak/>
+        </Sequence>
+        <SerbestKesifUcusuYap/>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+</root>
