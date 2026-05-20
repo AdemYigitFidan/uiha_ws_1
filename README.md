@@ -34,7 +34,8 @@ git submodule update --init --recursive
 ### FailSafe Katmanımız
 
 Olası güvenlik sorunları ve onlara karşı alınması gereken aksiyonlar
-<img width="815" height="323" alt="image" src="https://github.com/user-attachments/assets/25a6a5c0-88e1-4574-b8c4-bce024ca51e4" />
+<img width="1000" height="469" alt="image" src="https://github.com/user-attachments/assets/901ace38-5000-44b9-856e-5081438d26a8" />
+
 
 ### Görev Seçim Katmanımız
 
